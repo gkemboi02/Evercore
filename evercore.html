@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evercore — Africa's AI Marketing Finance Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #060F1E;
+    --navy2: #0A1628;
+    --navy3: #0E1F3A;
+    --teal: #00C896;
+    --teal2: #00A87E;
+    --teal-glow: rgba(0,200,150,0.18);
+    --white: #FFFFFF;
+    --off-white: #F0F4F8;
+    --muted: #8FA3B8;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%; height: 68px;
+    background: rgba(6,15,30,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.4rem;
+    color: var(--white); text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--teal); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .btn-nav {
+    background: var(--teal); color: var(--navy);
+    padding: 0.5rem 1.3rem; border-radius: 6px;
+    font-weight: 700; font-size: 0.88rem;
+    text-decoration: none; font-family: 'Syne', sans-serif;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-nav:hover { background: var(--teal2); transform: translateY(-1px); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    justify-content: center; text-align: center;
+    padding: 120px 5% 80px;
+    position: relative; overflow: hidden;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,200,150,0.12) 0%, transparent 70%), var(--navy);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 860px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,200,150,0.12); border: 1px solid rgba(0,200,150,0.3);
+    color: var(--teal); padding: 0.4rem 1rem; border-radius: 100px;
+    font-size: 0.82rem; font-weight: 600; margin-bottom: 1.8rem;
+    letter-spacing: 0.3px;
+  }
+  .hero-badge::before { content: '●'; font-size: 0.5rem; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  h1.hero-title {
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    font-weight: 800; line-height: 1.08;
+    letter-spacing: -1.5px;
+    margin-bottom: 1.4rem;
+  }
+  .hero-title .highlight {
+    background: linear-gradient(135deg, var(--teal), #4FFFCF);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.22rem);
+    color: var(--muted); max-width: 580px; margin: 0 auto 2.5rem;
+    line-height: 1.65; font-weight: 400;
+  }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 1rem;
+    flex-wrap: wrap; margin-bottom: 2.8rem;
+  }
+  .stat-badge {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.6rem 1.2rem; border-radius: 8px;
+    font-size: 0.9rem; font-weight: 600;
+  }
+  .stat-badge strong { color: var(--teal); font-family: 'Syne', sans-serif; display: block; font-size: 1.1rem; }
+  .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--teal); color: var(--navy);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-weight: 700; font-size: 1rem;
+    text-decoration: none; font-family: 'Syne', sans-serif;
+    border: none; cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(0,200,150,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(0,200,150,0.5); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    padding: 0.85rem 2rem; border-radius: 8px;
+    font-weight: 600; font-size: 1rem;
+    text-decoration: none; font-family: 'Syne', sans-serif;
+    border: 1px solid rgba(255,255,255,0.25); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* SECTIONS */
+  section { padding: 100px 5%; }
+  .section-label {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: var(--teal);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800; letter-spacing: -0.8px;
+    line-height: 1.15; margin-bottom: 1rem;
+  }
+  .section-sub {
+    color: var(--muted); font-size: 1.05rem;
+    max-width: 560px; line-height: 1.65;
+  }
+  .section-header { margin-bottom: 3.5rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* PROBLEM */
+  #problem { background: var(--navy); }
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; margin-bottom: 2.5rem;
+  }
+  .problem-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 2rem;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .problem-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .problem-card:hover { border-color: rgba(0,200,150,0.3); transform: translateY(-4px); }
+  .problem-card:hover::before { opacity: 1; }
+  .problem-num {
+    font-family: 'Syne', sans-serif; font-size: 2.5rem;
+    font-weight: 800; color: rgba(0,200,150,0.15);
+    line-height: 1; margin-bottom: 1rem;
+  }
+  .problem-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+  .problem-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .problem-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.65; }
+  .problem-footer {
+    text-align: center; padding: 1.5rem 2rem;
+    background: rgba(0,200,150,0.06); border: 1px solid rgba(0,200,150,0.15);
+    border-radius: 12px;
+    color: var(--off-white); font-size: 1rem; font-weight: 500;
+  }
+  .problem-footer strong { color: var(--teal); }
+
+  /* SOLUTION */
+  #solution { background: #07101F; }
+  .solution-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem; margin-bottom: 2rem;
+  }
+  .solution-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem;
+    transition: all 0.3s;
+  }
+  .solution-card:hover { transform: translateY(-4px); border-color: rgba(0,200,150,0.3); }
+  .layer-tag {
+    display: inline-block;
+    background: rgba(0,200,150,0.15); color: var(--teal);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 0.3rem 0.8rem; border-radius: 4px; margin-bottom: 1rem;
+  }
+  .solution-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .solution-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.65; }
+  .solution-modes {
+    background: rgba(0,200,150,0.07); border: 1px solid rgba(0,200,150,0.18);
+    border-radius: 12px; padding: 1.2rem 1.6rem;
+    font-size: 0.95rem; color: var(--off-white);
+    display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+  }
+  .solution-modes .mode-label { color: var(--teal); font-weight: 700; white-space: nowrap; }
+
+  /* HOW IT WORKS */
+  #how { background: var(--navy); }
+  .steps-wrapper {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0; position: relative;
+  }
+  .steps-wrapper::before {
+    content: ''; position: absolute;
+    top: 36px; left: 10%; right: 10%; height: 2px;
+    background: linear-gradient(90deg, var(--teal), rgba(0,200,150,0.1));
+    z-index: 0;
+  }
+  .step {
+    text-align: center; padding: 0 1rem; position: relative; z-index: 1;
+  }
+  .step-num {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--navy3); border: 2px solid var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+    font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+    color: var(--teal);
+    box-shadow: 0 0 20px rgba(0,200,150,0.2);
+    transition: all 0.3s;
+  }
+  .step:hover .step-num { background: var(--teal); color: var(--navy); box-shadow: 0 0 30px rgba(0,200,150,0.5); }
+  .step h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .step p { color: var(--muted); font-size: 0.82rem; line-height: 1.5; }
+  .mode-note {
+    margin-top: 3rem; text-align: center;
+    padding: 1rem 2rem;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; color: var(--muted); font-size: 0.9rem;
+  }
+  .mode-note strong { color: var(--white); }
+
+  /* PRICING */
+  #pricing { background: #07101F; }
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .pricing-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 2rem;
+    transition: all 0.3s; position: relative;
+  }
+  .pricing-card.popular {
+    background: linear-gradient(145deg, rgba(0,200,150,0.12), rgba(0,200,150,0.04));
+    border-color: rgba(0,200,150,0.4);
+    transform: scale(1.03);
+  }
+  .popular-tag {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: var(--teal); color: var(--navy);
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+    padding: 0.3rem 1rem; border-radius: 100px;
+    font-family: 'Syne', sans-serif; white-space: nowrap;
+  }
+  .pricing-card:hover:not(.popular) { border-color: rgba(0,200,150,0.25); transform: translateY(-4px); }
+  .pricing-tier { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--teal); margin-bottom: 0.4rem; }
+  .pricing-mode { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.2rem; }
+  .pricing-value {
+    font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800;
+    margin-bottom: 0.2rem;
+  }
+  .pricing-earn { color: var(--teal); font-size: 0.88rem; font-weight: 600; margin-bottom: 1.4rem; }
+  .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .pricing-features li {
+    font-size: 0.88rem; color: var(--muted);
+    display: flex; align-items: flex-start; gap: 0.5rem;
+  }
+  .pricing-features li::before { content: '✓'; color: var(--teal); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .pricing-divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 1.2rem 0; }
+
+  /* MARKET */
+  #market { background: var(--navy); }
+  .market-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-bottom: 3rem;
+  }
+  .market-stat {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 2rem; text-align: center;
+    transition: all 0.3s;
+  }
+  .market-stat:hover { border-color: rgba(0,200,150,0.3); transform: translateY(-4px); }
+  .market-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--teal); margin-bottom: 0.5rem; }
+  .market-num {
+    font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800; line-height: 1; margin-bottom: 0.4rem;
+  }
+  .market-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+  .market-growth { color: var(--teal); font-size: 0.82rem; font-weight: 600; margin-top: 0.3rem; }
+  .market-why {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 2rem;
+    display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;
+  }
+  .market-why-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+  .why-pills { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+  .why-pill {
+    background: rgba(0,200,150,0.08); border: 1px solid rgba(0,200,150,0.2);
+    color: var(--off-white); padding: 0.4rem 1rem; border-radius: 100px;
+    font-size: 0.85rem;
+  }
+
+  /* TRACTION */
+  #traction { background: #07101F; }
+  .traction-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .traction-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 2rem;
+    transition: all 0.3s;
+  }
+  .traction-card:hover { border-color: rgba(0,200,150,0.3); transform: translateY(-4px); }
+  .traction-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .traction-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  .traction-card p { color: var(--muted); font-size: 0.92rem; line-height: 1.65; }
+  .traction-num {
+    font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800;
+    color: var(--teal); line-height: 1; margin-bottom: 0.3rem;
+  }
+
+  /* WHY WINS */
+  #why { background: var(--navy); }
+  .wins-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  .win-card {
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px; padding: 2rem;
+    transition: all 0.3s;
+  }
+  .win-card:hover { border-color: rgba(0,200,150,0.3); background: rgba(0,200,150,0.04); transform: translateY(-4px); }
+  .win-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .win-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .win-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.65; }
+
+  /* CTA / FOOTER */
+  #cta {
+    background: linear-gradient(135deg, #07101F 0%, var(--navy) 50%, #071A12 100%);
+    text-align: center; padding: 100px 5%;
+    position: relative; overflow: hidden;
+  }
+  #cta::before {
+    content: ''; position: absolute;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,200,150,0.1) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .cta-content { position: relative; z-index: 2; max-width: 600px; margin: 0 auto; }
+  #cta h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.8px; margin-bottom: 1rem; }
+  #cta p { color: var(--muted); font-size: 1.05rem; margin-bottom: 2.5rem; line-height: 1.65; }
+  .waitlist-form {
+    display: flex; gap: 0.8rem; max-width: 480px; margin: 0 auto 3rem;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .waitlist-form input {
+    flex: 1; min-width: 220px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+    color: var(--white); padding: 0.85rem 1.2rem; border-radius: 8px;
+    font-size: 0.95rem; font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border-color 0.2s;
+  }
+  .waitlist-form input::placeholder { color: var(--muted); }
+  .waitlist-form input:focus { border-color: var(--teal); }
+  .waitlist-form button {
+    background: var(--teal); color: var(--navy);
+    border: none; padding: 0.85rem 1.8rem; border-radius: 8px;
+    font-weight: 700; font-size: 0.95rem; cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(0,200,150,0.3);
+  }
+  .waitlist-form button:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,200,150,0.5); }
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 1.8rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    color: var(--muted); font-size: 0.82rem;
+  }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--white); }
+  .footer-logo span { color: var(--teal); }
+  .footer-socials { display: flex; gap: 1rem; }
+  .footer-socials a {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); text-decoration: none; font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .footer-socials a:hover { background: rgba(0,200,150,0.1); border-color: rgba(0,200,150,0.3); color: var(--teal); }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up:nth-child(2) { transition-delay: 0.1s; }
+  .fade-up:nth-child(3) { transition-delay: 0.2s; }
+  .fade-up:nth-child(4) { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .steps-wrapper { grid-template-columns: 1fr; gap: 1.5rem; }
+    .steps-wrapper::before { display: none; }
+    .market-stats { grid-template-columns: 1fr; }
+    .pricing-card.popular { transform: none; }
+    .hamburger { display: flex; }
+  }
+  @media (max-width: 640px) {
+    section { padding: 70px 5%; }
+    .hero-stats { gap: 0.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Ever<span>core</span></a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#traction">Traction</a></li>
+  </ul>
+  <a href="#cta" class="btn-nav">Get Early Access</a>
+  <div class="hamburger" onclick="this.classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🌍 Built for African SMEs · Nairobi, Kenya · 2026</div>
+    <h1 class="hero-title">
+      Africa's First<br>
+      <span class="highlight">AI-Powered Marketing</span><br>
+      Finance Platform for SMEs
+    </h1>
+    <p class="hero-sub">The only platform where SMEs design, finance & execute influencer campaigns — starting from KES 5,000.</p>
+    <div class="hero-stats">
+      <div class="stat-badge"><strong>3M+</strong>Kenyan SMEs</div>
+      <div class="stat-badge"><strong>KES 5K+</strong>Entry Campaign</div>
+      <div class="stat-badge"><strong>40%</strong>Commission Take</div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#cta" class="btn-primary">Get Early Access →</a>
+      <a href="#how" class="btn-outline">▶ See How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">The Problem Is Structural —<br>Not Cosmetic</h2>
+      <p class="section-sub">Three interlocking failures that no single tool addresses.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card fade-up">
+        <div class="problem-num">01</div>
+        <div class="problem-icon">🔍</div>
+        <h3>Discovery is Manual & Biased</h3>
+        <p>Business owners find influencers through WhatsApp groups and personal networks. No pricing data, no audience verification, no performance history.</p>
+      </div>
+      <div class="problem-card fade-up">
+        <div class="problem-num">02</div>
+        <div class="problem-icon">⚡</div>
+        <h3>Execution is Uncoordinated</h3>
+        <p>Briefs via DM. Payments via M-Pesa. Tracking via gut feel. No campaign lifecycle tool exists for the Kenyan SME context.</p>
+      </div>
+      <div class="problem-card fade-up">
+        <div class="problem-num">03</div>
+        <div class="problem-icon">💸</div>
+        <h3>Capital Blocks the Best Campaigns</h3>
+        <p>An SME with KES 50K/month wants a KES 200K campaign. With 0% credit access, they shrink or skip it entirely. Budgets as low as KES 5K go untapped.</p>
+      </div>
+    </div>
+    <div class="problem-footer">
+      These three problems are inseparable. <strong>Evercore solves them together</strong> — starting at KES 5,000.
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The Solution</div>
+      <h2 class="section-title">One Platform. Three Layers.</h2>
+      <p class="section-sub">AI matching + campaign execution + embedded financing — in one seamless experience.</p>
+    </div>
+    <div class="solution-grid">
+      <div class="solution-card fade-up">
+        <div class="layer-tag">Layer 1</div>
+        <h3>🏪 Creator Marketplace</h3>
+        <p>Verified pool of influencers, designers, and UGC creators — scored by niche, engagement authenticity, and past performance.</p>
+      </div>
+      <div class="solution-card fade-up">
+        <div class="layer-tag">Layer 2</div>
+        <h3>🤖 AI Campaign Engine</h3>
+        <p>Business sets goal + budget (from KES 5K). AI builds the optimal campaign: matched creators, content format, platform split, predicted ROI — before spending a shilling.</p>
+      </div>
+      <div class="solution-card fade-up">
+        <div class="layer-tag">Layer 3</div>
+        <h3>💳 Embedded Campaign Finance</h3>
+        <p>SMEs access credit to run bigger campaigns. Creators get paid upfront. Repayment structured around campaign outcomes, underwritten by our performance data.</p>
+      </div>
+    </div>
+    <div class="solution-modes">
+      <span class="mode-label">Two modes:</span>
+      <span>⚡ <strong>Mode A:</strong> Pick your creator → AI prices it</span>
+      <span>&nbsp;|&nbsp;</span>
+      <span>⚡ <strong>Mode B:</strong> Enter your budget from KES 5K → AI selects best creators you can afford</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">From Sign-Up to Live ROI Dashboard<br>in Under 15 Minutes</h2>
+    </div>
+    <div class="steps-wrapper">
+      <div class="step fade-up">
+        <div class="step-num">1</div>
+        <h4>Register & Set Niche</h4>
+        <p>Fashion, food, e-commerce…</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">2</div>
+        <h4>Set Goal + Budget</h4>
+        <p>From KES 5K. Platform + duration.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">3</div>
+        <h4>AI Builds Your Plan</h4>
+        <p>Creators matched, ROI predicted.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">4</div>
+        <h4>Finance if Needed</h4>
+        <p>Approve credit, launch 1-click.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">5</div>
+        <h4>Track in Real Time</h4>
+        <p>Spend, reach & ROI live.</p>
+      </div>
+    </div>
+    <div class="mode-note">
+      <strong>Mode A:</strong> Start with a creator you love → AI prices it &nbsp;|&nbsp; <strong>Mode B:</strong> Enter budget from KES 5K → AI selects best creators you can afford
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-sub">40% commission on all tiers. Blended average: KES 26,000 revenue per campaign.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card fade-up">
+        <div class="pricing-tier">DIY / Custom</div>
+        <div class="pricing-mode">You design it</div>
+        <div class="pricing-value">KES 5,000+</div>
+        <div class="pricing-earn">Evercore earns KES 2,000+ (40%)</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>Business builds own package</li>
+          <li>AI assists creator selection</li>
+          <li>Any creator, any platform</li>
+          <li>High volume acquisition engine</li>
+        </ul>
+      </div>
+      <div class="pricing-card fade-up">
+        <div class="pricing-tier">Starter</div>
+        <div class="pricing-mode">We curate it</div>
+        <div class="pricing-value">KES 25,000</div>
+        <div class="pricing-earn">Evercore earns KES 10,000 (40%)</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>1 micro-influencer</li>
+          <li>Single platform (IG or TikTok)</li>
+          <li>7-day campaign</li>
+          <li>Basic analytics dashboard</li>
+        </ul>
+      </div>
+      <div class="pricing-card popular fade-up">
+        <div class="popular-tag">⭐ Most Popular</div>
+        <div class="pricing-tier">Growth</div>
+        <div class="pricing-mode">We optimise it</div>
+        <div class="pricing-value">KES 80,000</div>
+        <div class="pricing-earn">Evercore earns KES 32,000 (40%)</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>3 influencers (micro + mid)</li>
+          <li>Multi-platform IG + TikTok</li>
+          <li>14-day + AI optimisation</li>
+          <li>Full ROI dashboard</li>
+        </ul>
+      </div>
+      <div class="pricing-card fade-up">
+        <div class="pricing-tier">Pro</div>
+        <div class="pricing-mode">We run it</div>
+        <div class="pricing-value">KES 200,000+</div>
+        <div class="pricing-earn">Evercore earns KES 80,000+ (40%)</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li>5+ influencers + UGC content</li>
+          <li>All platforms + production</li>
+          <li>30-day managed campaign</li>
+          <li>White-label performance report</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Market Opportunity</div>
+      <h2 class="section-title">A Large, Underserved,<br>Fast-Moving Market</h2>
+      <p class="section-sub">We are capturing a wave already in motion.</p>
+    </div>
+    <div class="market-stats">
+      <div class="market-stat fade-up">
+        <div class="market-label">TAM</div>
+        <div class="market-num">$4.1B</div>
+        <div class="market-desc">African SME Digital Marketing Spend</div>
+        <div class="market-growth">↑ Growing 28% YoY</div>
+      </div>
+      <div class="market-stat fade-up">
+        <div class="market-label">SAM</div>
+        <div class="market-num">$320M</div>
+        <div class="market-desc">Kenya + East Africa Influencer Market</div>
+        <div class="market-growth">Est. 2026</div>
+      </div>
+      <div class="market-stat fade-up">
+        <div class="market-label">SOM</div>
+        <div class="market-num">KES 360M</div>
+        <div class="market-desc">Evercore Year 3 Target Revenue</div>
+        <div class="market-growth">~750 campaigns/month</div>
+      </div>
+    </div>
+    <div class="market-why">
+      <div class="market-why-title">🇰🇪 Why Kenya First</div>
+      <div class="why-pills">
+        <span class="why-pill">55M mobile users</span>
+        <span class="why-pill">Highest creator-per-capita in East Africa</span>
+        <span class="why-pill">M-Pesa enables instant payouts</span>
+        <span class="why-pill">Nairobi = East Africa's startup capital</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRACTION -->
+<section id="traction">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Validation</div>
+      <h2 class="section-title">Early Validation —<br>The Signal is Real</h2>
+      <p class="section-sub">We haven't built the platform yet. We've already proven the demand.</p>
+    </div>
+    <div class="traction-grid">
+      <div class="traction-card fade-up">
+        <div class="traction-num">30+</div>
+        <div class="traction-icon">🗣️</div>
+        <h3>SME Problem Confirmed</h3>
+        <p>Nairobi SME owner interviews conducted. 26 of 30 currently find influencers via WhatsApp. Zero use a structured platform.</p>
+      </div>
+      <div class="traction-card fade-up">
+        <div class="traction-num">Ready</div>
+        <div class="traction-icon">🎬</div>
+        <h3>Creator Supply Ready</h3>
+        <p>Influencers cited late payments and lack of brand access as their #1 pain. Our advance payout model is an immediate hook.</p>
+      </div>
+      <div class="traction-card fade-up">
+        <div class="traction-num">8</div>
+        <div class="traction-icon">💰</div>
+        <h3>Willingness to Pay Confirmed</h3>
+        <p>SME owners said they'd pay KES 2K–5K/month for a platform with guaranteed ROI visibility — before we've built anything.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY WINS -->
+<section id="why">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Why Evercore</div>
+      <h2 class="section-title">Why Evercore Wins —<br>and Why Now</h2>
+      <p class="section-sub">The market, the model, and the timing are all aligned.</p>
+    </div>
+    <div class="wins-grid">
+      <div class="win-card fade-up">
+        <div class="win-icon">✅</div>
+        <h3>Real Problem, Proven Demand</h3>
+        <p>30+ SME interviews confirm the pain. 8 businesses indicated willingness to pay before we built anything.</p>
+      </div>
+      <div class="win-card fade-up">
+        <div class="win-icon">🔒</div>
+        <h3>Defensible Data Moat</h3>
+        <p>AI flywheel improves with every campaign — from KES 5K DIY to KES 200K Pro. Latecomers can't buy what we've learned.</p>
+      </div>
+      <div class="win-card fade-up">
+        <div class="win-icon">🌍</div>
+        <h3>Pan-African Expansion Path</h3>
+        <p>Kenya → Uganda → Tanzania → Nigeria. Same product. Same model. Rapidly growing creator economies across the continent.</p>
+      </div>
+      <div class="win-card fade-up">
+        <div class="win-icon">🚀</div>
+        <h3>Entry at KES 5K = Massive TAM</h3>
+        <p>Every SME with KES 5K can start. No other platform serves this segment. That's our acquisition engine and moat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / FOOTER -->
+<section id="cta">
+  <div class="cta-content">
+    <div class="section-label" style="text-align:center; margin-bottom: 1rem;">Join Evercore</div>
+    <h2>Ready to grow your business<br>with smarter campaigns?</h2>
+    <p>Join our early access waitlist and get your first campaign at no cost. Be part of the future of African SME marketing.</p>
+    <div class="waitlist-form">
+      <input type="email" placeholder="Enter your email address" />
+      <button onclick="handleWaitlist()">Join Waitlist →</button>
+    </div>
+    <p style="font-size:0.8rem; color: var(--muted);">🔒 No spam. Early access only. Unsubscribe anytime.</p>
+  </div>
+  <footer>
+    <div class="footer-logo">Ever<span>core</span></div>
+    <div style="color: var(--muted); font-size: 0.82rem;">Confidential &nbsp;|&nbsp; Nairobi, Kenya &nbsp;|&nbsp; 2026</div>
+    <div class="footer-socials">
+      <a href="#" title="LinkedIn">in</a>
+      <a href="#" title="Twitter">𝕏</a>
+      <a href="#" title="Instagram">ig</a>
+    </div>
+  </footer>
+</section>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').style.background =
+      window.scrollY > 50 ? 'rgba(6,15,30,0.98)' : 'rgba(6,15,30,0.85)';
+  });
+
+  // Waitlist
+  function handleWaitlist() {
+    const input = document.querySelector('.waitlist-form input');
+    if (input.value && input.value.includes('@')) {
+      input.value = '';
+      input.placeholder = '✅ You\'re on the list! We\'ll be in touch.';
+      input.style.borderColor = 'var(--teal)';
+      input.style.color = 'var(--teal)';
+    } else {
+      input.style.borderColor = '#ff4444';
+      input.placeholder = 'Please enter a valid email';
+    }
+  }
+</script>
+</body>
+</html>
