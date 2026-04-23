@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Evercore — Africa's AI Marketing Finance Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--navy:#060F1E;--navy2:#0A1628;--navy3:#0E1F3A;--teal:#00C896;--teal2:#00A87E;--white:#FFFFFF;--off-white:#F0F4F8;--muted:#8FA3B8;--card-bg:rgba(255,255,255,0.04);--card-border:rgba(255,255,255,0.08);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);overflow-x:hidden;font-size:14px;}
+h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:60px;background:rgba(6,15,30,0.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06);transition:background 0.3s;gap:1rem;}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--white);text-decoration:none;letter-spacing:-0.5px;flex-shrink:0;}
+.nav-logo span{color:var(--teal);}
+.nav-links{display:flex;gap:1.4rem;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.78rem;font-weight:500;transition:color 0.2s;}
+.nav-links a:hover{color:var(--white);}
+.nav-right{display:flex;gap:0.5rem;align-items:center;flex-shrink:0;}
+.btn-signin{background:transparent;color:var(--white);padding:0.38rem 0.9rem;border-radius:6px;font-weight:600;font-size:0.76rem;font-family:'Syne',sans-serif;border:1px solid rgba(255,255,255,0.2);cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn-signin:hover{border-color:var(--teal);color:var(--teal);}
+.btn-nav{background:var(--teal);color:var(--navy);padding:0.38rem 0.9rem;border-radius:6px;font-weight:700;font-size:0.76rem;font-family:'Syne',sans-serif;border:none;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn-nav:hover{background:var(--teal2);}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;}
+.hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(4,10,20,0.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.active{display:flex;}
+.modal{background:#0C1928;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:2rem 1.8rem;width:100%;max-width:400px;position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.07);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.modal-close:hover{background:rgba(255,255,255,0.15);color:var(--white);}
+.modal-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:0.2rem;}
+.modal-logo span{color:var(--teal);}
+.modal-subtitle{color:var(--muted);font-size:0.8rem;margin-bottom:1.5rem;}
+.auth-tabs{display:flex;gap:0.4rem;margin-bottom:1.5rem;background:rgba(255,255,255,0.04);padding:4px;border-radius:10px;}
+.auth-tab{flex:1;padding:0.5rem;border-radius:8px;border:none;background:transparent;color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;font-size:0.76rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.auth-tab.active{background:var(--teal);color:var(--navy);}
+.role-tabs{display:flex;gap:0.5rem;margin-bottom:1.4rem;}
+.role-tab{flex:1;padding:0.7rem 0.4rem;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--muted);font-size:0.72rem;cursor:pointer;transition:all 0.2s;text-align:center;}
+.role-tab.active{border-color:rgba(0,200,150,0.5);background:rgba(0,200,150,0.1);color:var(--white);}
+.role-tab .ricon{font-size:1.2rem;display:block;margin-bottom:0.25rem;}
+.form-group{margin-bottom:0.9rem;}
+.form-group label{display:block;font-size:0.72rem;font-weight:600;color:var(--muted);margin-bottom:0.35rem;letter-spacing:0.3px;text-transform:uppercase;}
+.form-group input,.form-group select{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--white);padding:0.62rem 0.9rem;border-radius:8px;font-size:0.82rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;-webkit-appearance:none;appearance:none;}
+.form-group select option{background:#0C1928;color:var(--white);}
+.form-group input:focus,.form-group select:focus{border-color:var(--teal);}
+.form-group input::placeholder{color:rgba(143,163,184,0.5);}
+.btn-submit{width:100%;background:var(--teal);color:var(--navy);border:none;padding:0.75rem;border-radius:8px;font-weight:700;font-size:0.85rem;cursor:pointer;font-family:'Syne',sans-serif;margin-top:0.4rem;transition:all 0.2s;}
+.btn-submit:hover{background:var(--teal2);}
+.modal-switch{text-align:center;margin-top:1rem;font-size:0.78rem;color:var(--muted);}
+.modal-switch a{color:var(--teal);cursor:pointer;text-decoration:none;}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:90px 5% 60px;position:relative;overflow:hidden;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,200,150,0.1) 0%,transparent 70%),var(--navy);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:55px 55px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);}
+.hero-content{position:relative;z-index:2;max-width:800px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.3);color:var(--teal);padding:0.32rem 0.85rem;border-radius:100px;font-size:0.72rem;font-weight:600;margin-bottom:1.4rem;}
+.hero-badge::before{content:'●';font-size:0.4rem;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+h1.hero-title{font-size:clamp(1.7rem,4vw,3rem);font-weight:800;line-height:1.1;letter-spacing:-0.8px;margin-bottom:1rem;}
+.hero-title .highlight{background:linear-gradient(135deg,var(--teal),#4FFFCF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(0.82rem,1.4vw,0.96rem);color:var(--muted);max-width:500px;margin:0 auto 1.8rem;line-height:1.7;}
+.hero-stats{display:flex;justify-content:center;gap:0.7rem;flex-wrap:wrap;margin-bottom:2rem;}
+.stat-badge{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:0.5rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:600;}
+.stat-badge strong{color:var(--teal);font-family:'Syne',sans-serif;display:block;font-size:1rem;}
+
+/* HERO SIGNUP BUTTONS */
+.hero-signup-label{font-size:0.72rem;color:var(--muted);margin-bottom:0.8rem;letter-spacing:0.5px;text-transform:uppercase;font-weight:600;}
+.hero-ctas{display:flex;gap:0.7rem;justify-content:center;flex-wrap:wrap;}
+.btn-hero-business{background:var(--teal);color:var(--navy);padding:0.72rem 1.4rem;border-radius:8px;font-weight:700;font-size:0.82rem;font-family:'Syne',sans-serif;border:none;cursor:pointer;transition:all 0.2s;box-shadow:0 0 22px rgba(0,200,150,0.22);}
+.btn-hero-business:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,200,150,0.38);}
+.btn-hero-influencer{background:rgba(0,200,150,0.12);color:var(--teal);padding:0.72rem 1.4rem;border-radius:8px;font-weight:700;font-size:0.82rem;font-family:'Syne',sans-serif;border:1px solid rgba(0,200,150,0.35);cursor:pointer;transition:all 0.2s;}
+.btn-hero-influencer:hover{background:rgba(0,200,150,0.2);transform:translateY(-2px);}
+.btn-hero-other{background:transparent;color:var(--white);padding:0.72rem 1.4rem;border-radius:8px;font-weight:600;font-size:0.82rem;font-family:'Syne',sans-serif;border:1px solid rgba(255,255,255,0.2);cursor:pointer;transition:all 0.2s;}
+.btn-hero-other:hover{border-color:rgba(255,255,255,0.45);transform:translateY(-2px);}
+
+/* SECTIONS */
+section{padding:75px 5%;}
+.container{max-width:1060px;margin:0 auto;}
+.section-label{font-size:0.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal);margin-bottom:0.7rem;}
+.section-title{font-size:clamp(1.4rem,2.8vw,2.2rem);font-weight:800;letter-spacing:-0.5px;line-height:1.15;margin-bottom:0.8rem;}
+.section-sub{color:var(--muted);font-size:0.88rem;max-width:520px;line-height:1.65;}
+.section-header{margin-bottom:2.8rem;}
+
+/* PROBLEM */
+#problem{background:var(--navy);}
+.problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-bottom:1.8rem;}
+.problem-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:1.5rem;transition:all 0.3s;position:relative;overflow:hidden;}
+.problem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),transparent);opacity:0;transition:opacity 0.3s;}
+.problem-card:hover{border-color:rgba(0,200,150,0.3);transform:translateY(-3px);}
+.problem-card:hover::before{opacity:1;}
+.problem-num{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:rgba(0,200,150,0.1);line-height:1;margin-bottom:0.7rem;}
+.problem-icon{font-size:1.4rem;margin-bottom:0.5rem;}
+.problem-card h3{font-size:0.92rem;font-weight:700;margin-bottom:0.45rem;}
+.problem-card p{color:var(--muted);font-size:0.8rem;line-height:1.65;}
+.problem-footer{text-align:center;padding:1.1rem 1.4rem;background:rgba(0,200,150,0.05);border:1px solid rgba(0,200,150,0.12);border-radius:10px;color:var(--off-white);font-size:0.85rem;font-weight:500;}
+.problem-footer strong{color:var(--teal);}
+
+/* SOLUTION */
+#solution{background:#07101F;}
+.solution-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem;margin-bottom:1.3rem;}
+.solution-card{background:linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.5rem;transition:all 0.3s;}
+.solution-card:hover{transform:translateY(-3px);border-color:rgba(0,200,150,0.3);}
+.layer-tag{display:inline-block;background:rgba(0,200,150,0.12);color:var(--teal);font-size:0.62rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0.22rem 0.65rem;border-radius:4px;margin-bottom:0.7rem;}
+.solution-card h3{font-size:0.92rem;font-weight:700;margin-bottom:0.45rem;}
+.solution-card p{color:var(--muted);font-size:0.8rem;line-height:1.65;}
+.solution-modes{background:rgba(0,200,150,0.05);border:1px solid rgba(0,200,150,0.12);border-radius:10px;padding:0.9rem 1.2rem;font-size:0.8rem;color:var(--off-white);display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;}
+.solution-modes .mode-label{color:var(--teal);font-weight:700;white-space:nowrap;}
+
+/* HOW IT WORKS */
+#how{background:var(--navy);}
+.steps-wrapper{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;}
+.steps-wrapper::before{content:'';position:absolute;top:30px;left:10%;right:10%;height:2px;background:linear-gradient(90deg,var(--teal),rgba(0,200,150,0.08));z-index:0;}
+.step{text-align:center;padding:0 0.7rem;position:relative;z-index:1;}
+.step-num{width:60px;height:60px;border-radius:50%;background:var(--navy3);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 0.9rem;font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--teal);transition:all 0.3s;}
+.step:hover .step-num{background:var(--teal);color:var(--navy);}
+.step h4{font-size:0.8rem;font-weight:700;margin-bottom:0.25rem;}
+.step p{color:var(--muted);font-size:0.7rem;line-height:1.5;}
+.mode-note{margin-top:2.2rem;text-align:center;padding:0.8rem 1.4rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;color:var(--muted);font-size:0.78rem;}
+.mode-note strong{color:var(--white);}
+
+/* PRICING */
+#pricing{background:#07101F;}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1.2rem;}
+.pricing-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.5rem;transition:all 0.3s;position:relative;}
+.pricing-card.popular{background:linear-gradient(145deg,rgba(0,200,150,0.1),rgba(0,200,150,0.03));border-color:rgba(0,200,150,0.4);transform:scale(1.02);}
+.popular-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--teal);color:var(--navy);font-size:0.6rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:0.22rem 0.85rem;border-radius:100px;font-family:'Syne',sans-serif;white-space:nowrap;}
+.pricing-card:hover:not(.popular){border-color:rgba(0,200,150,0.22);transform:translateY(-3px);}
+.pricing-tier{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--teal);margin-bottom:0.25rem;}
+.pricing-mode{color:var(--muted);font-size:0.76rem;margin-bottom:0.9rem;}
+.pricing-value{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:0.18rem;}
+.pricing-earn{color:var(--teal);font-size:0.74rem;font-weight:600;margin-bottom:1rem;}
+.pricing-features{list-style:none;display:flex;flex-direction:column;gap:0.4rem;}
+.pricing-features li{font-size:0.76rem;color:var(--muted);display:flex;align-items:flex-start;gap:0.35rem;}
+.pricing-features li::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0;}
+.pricing-divider{border:none;border-top:1px solid rgba(255,255,255,0.07);margin:0.9rem 0;}
+
+/* WHY WINS */
+#why{background:var(--navy);}
+.wins-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:1.2rem;}
+.win-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:1.5rem;transition:all 0.3s;}
+.win-card:hover{border-color:rgba(0,200,150,0.3);background:rgba(0,200,150,0.04);transform:translateY(-3px);}
+.win-icon{font-size:1.5rem;margin-bottom:0.7rem;}
+.win-card h3{font-size:0.88rem;font-weight:700;margin-bottom:0.38rem;}
+.win-card p{color:var(--muted);font-size:0.78rem;line-height:1.65;}
+
+/* CONTACT */
+#contact{background:#07101F;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+.contact-items{display:flex;flex-direction:column;gap:0.9rem;margin-top:0.5rem;}
+.contact-item{display:flex;align-items:center;gap:0.9rem;padding:0.9rem 1.1rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;transition:all 0.3s;text-decoration:none;color:var(--white);}
+.contact-item:hover{border-color:rgba(0,200,150,0.3);background:rgba(0,200,150,0.05);}
+.contact-icon{width:38px;height:38px;border-radius:9px;background:rgba(0,200,150,0.1);border:1px solid rgba(0,200,150,0.18);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.ci-label{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--teal);margin-bottom:0.18rem;}
+.ci-value{font-size:0.85rem;font-weight:600;}
+.contact-form-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.6rem;}
+.contact-form-card h3{font-size:0.96rem;font-weight:700;margin-bottom:0.3rem;}
+.contact-form-card p{color:var(--muted);font-size:0.78rem;margin-bottom:1.2rem;}
+.contact-form .form-group{margin-bottom:0.8rem;}
+.contact-form .form-group input,.contact-form .form-group textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:var(--white);padding:0.6rem 0.85rem;border-radius:8px;font-size:0.8rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.contact-form .form-group textarea{resize:vertical;min-height:85px;line-height:1.6;}
+.contact-form .form-group input:focus,.contact-form .form-group textarea:focus{border-color:var(--teal);}
+.contact-form .form-group input::placeholder,.contact-form .form-group textarea::placeholder{color:rgba(143,163,184,0.5);}
+
+/* CTA */
+#cta{background:linear-gradient(135deg,#07101F 0%,var(--navy) 50%,#071A12 100%);text-align:center;padding:75px 5%;position:relative;overflow:hidden;}
+#cta::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,200,150,0.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.cta-content{position:relative;z-index:2;max-width:540px;margin:0 auto;}
+#cta h2{font-size:clamp(1.4rem,2.8vw,2.1rem);font-weight:800;letter-spacing:-0.5px;margin-bottom:0.7rem;}
+#cta p{color:var(--muted);font-size:0.85rem;margin-bottom:1.8rem;line-height:1.7;}
+.waitlist-form{display:flex;gap:0.6rem;max-width:420px;margin:0 auto 2rem;flex-wrap:wrap;justify-content:center;}
+.waitlist-form input{flex:1;min-width:190px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--white);padding:0.68rem 0.95rem;border-radius:8px;font-size:0.82rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.waitlist-form input::placeholder{color:var(--muted);}
+.waitlist-form input:focus{border-color:var(--teal);}
+.waitlist-form button{background:var(--teal);color:var(--navy);border:none;padding:0.68rem 1.4rem;border-radius:8px;font-weight:700;font-size:0.82rem;cursor:pointer;font-family:'Syne',sans-serif;transition:all 0.2s;}
+.waitlist-form button:hover{transform:translateY(-2px);}
+footer{border-top:1px solid rgba(255,255,255,0.07);padding:1.4rem 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.8rem;color:var(--muted);font-size:0.74rem;}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:0.95rem;color:var(--white);}
+.footer-logo span{color:var(--teal);}
+.footer-socials{display:flex;gap:0.6rem;}
+.footer-socials a{width:30px;height:30px;border-radius:7px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;font-size:0.75rem;transition:all 0.2s;}
+.footer-socials a:hover{background:rgba(0,200,150,0.1);border-color:rgba(0,200,150,0.3);color:var(--teal);}
+
+.fade-up{opacity:0;transform:translateY(22px);transition:opacity 0.55s ease,transform 0.55s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+.fade-up:nth-child(2){transition-delay:0.08s;}.fade-up:nth-child(3){transition-delay:0.16s;}.fade-up:nth-child(4){transition-delay:0.24s;}
+
+@media(max-width:768px){.nav-links{display:none;}.steps-wrapper{grid-template-columns:1fr;gap:1.2rem;}.steps-wrapper::before{display:none;}.pricing-card.popular{transform:none;}.contact-grid{grid-template-columns:1fr;}.hamburger{display:flex;}}
+@media(max-width:580px){section{padding:55px 5%;}.hero-stats{gap:0.4rem;}.hero-ctas{flex-direction:column;align-items:center;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Ever<span>core</span></a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-signin" onclick="openModal('signin')">Sign In</button>
+    <button class="btn-nav" onclick="openModal('signup')">Sign Up</button>
+  </div>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="authModal" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <div class="modal-logo">Ever<span>core</span></div>
+    <p class="modal-subtitle" id="modalSubtitle">Welcome back to Evercore</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabSignin" onclick="switchTab('signin')">Sign In</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+    <div class="role-tabs">
+      <div class="role-tab active" id="roleBusiness" onclick="switchRole('business')"><span class="ricon">&#x1F3E2;</span>Business</div>
+      <div class="role-tab" id="roleInfluencer" onclick="switchRole('influencer')"><span class="ricon">&#x1F3AC;</span>Influencer</div>
+      <div class="role-tab" id="roleCreative" onclick="switchRole('creative')"><span class="ricon">&#x1F3A8;</span>Creative</div>
+    </div>
+    <div id="signinForm">
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Enter password"/></div>
+      <button class="btn-submit">Sign In</button>
+      <p class="modal-switch">No account? <a onclick="switchTab('signup')">Sign up free</a></p>
+    </div>
+    <div id="signupForm" style="display:none;">
+      <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your name"/></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+      <div class="form-group" id="businessTypeGroup">
+        <label>Type of Business</label>
+        <select><option value="" disabled selected>Select your business type</option><option>Fashion &amp; Beauty</option><option>Food &amp; Restaurant</option><option>Events &amp; Entertainment</option><option>Health &amp; Wellness</option><option>Tech &amp; Services</option><option>E-commerce</option></select>
+      </div>
+      <div class="form-group" id="influencerTypeGroup" style="display:none;">
+        <label>Your Niche</label>
+        <select><option value="" disabled selected>Select your influencer niche</option><option>Hair &amp; Beauty</option><option>Food &amp; Cooking</option><option>Dance &amp; Entertainment</option><option>Fashion &amp; Lifestyle</option><option>Fitness &amp; Health</option><option>Tech &amp; Reviews</option></select>
+      </div>
+      <div class="form-group" id="creativeTypeGroup" style="display:none;">
+        <label>Type of Creative</label>
+        <select><option value="" disabled selected>Select your creative type</option><option>Photographer</option><option>Videographer</option><option>Graphic Designer</option><option>Copywriter</option><option>UGC Creator</option><option>Other</option></select>
+      </div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Create a password"/></div>
+      <button class="btn-submit">Create Account</button>
+      <p class="modal-switch">Have an account? <a onclick="switchTab('signin')">Sign in</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">&#x1F30D; Built for African SMEs &middot; Nairobi, Kenya &middot; 2026</div>
+    <h1 class="hero-title">Africa's First<br><span class="highlight">AI-Powered Marketing</span><br>Finance Platform for SMEs</h1>
+    <p class="hero-sub">The only platform where SMEs design, finance &amp; execute influencer campaigns &mdash; starting from KES 5,000.</p>
+    <div class="hero-stats">
+      <div class="stat-badge"><strong>3M+</strong>Kenyan SMEs</div>
+      <div class="stat-badge"><strong>KES 5K+</strong>Entry Campaign</div>
+      <div class="stat-badge"><strong>40%</strong>Commission Take</div>
+    </div>
+    <p class="hero-signup-label">Sign up as</p>
+    <div class="hero-ctas">
+      <button class="btn-hero-business" onclick="openSignup('business')">&#x1F3E2; Business</button>
+      <button class="btn-hero-influencer" onclick="openSignup('influencer')">&#x1F3AC; Influencer</button>
+      <button class="btn-hero-other" onclick="openSignup('creative')">&#x1F3A8; Other Creative</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">The Problem Is Structural &mdash;<br>Not Cosmetic</h2>
+      <p class="section-sub">Three interlocking failures that no single tool addresses.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card fade-up"><div class="problem-num">01</div><div class="problem-icon">&#x1F50D;</div><h3>Discovery is Manual &amp; Biased</h3><p>Business owners find influencers through WhatsApp groups. No pricing data, no audience verification, no performance history.</p></div>
+      <div class="problem-card fade-up"><div class="problem-num">02</div><div class="problem-icon">&#x26A1;</div><h3>Execution is Uncoordinated</h3><p>Briefs via DM. Payments via M-Pesa. Tracking via gut feel. No campaign lifecycle tool exists for the Kenyan SME context.</p></div>
+      <div class="problem-card fade-up"><div class="problem-num">03</div><div class="problem-icon">&#x1F4B8;</div><h3>Capital Blocks the Best Campaigns</h3><p>An SME with KES 50K/month wants a KES 200K campaign. With 0% credit access, they shrink or skip it entirely.</p></div>
+    </div>
+    <div class="problem-footer">These three problems are inseparable. <strong>Evercore solves them together</strong> &mdash; starting at KES 5,000.</div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The Solution</div>
+      <h2 class="section-title">One Platform. Three Layers.</h2>
+      <p class="section-sub">AI matching + campaign execution + embedded financing in one seamless experience.</p>
+    </div>
+    <div class="solution-grid">
+      <div class="solution-card fade-up"><div class="layer-tag">Layer 1</div><h3>&#x1F3EA; Creator Marketplace</h3><p>Verified influencers, designers &amp; UGC creators &mdash; scored by niche, engagement authenticity, and past performance.</p></div>
+      <div class="solution-card fade-up"><div class="layer-tag">Layer 2</div><h3>&#x1F916; AI Campaign Engine</h3><p>Set goal + budget from KES 5K. AI builds the optimal campaign: matched creators, content format, platform split, predicted ROI &mdash; before spending a shilling.</p></div>
+      <div class="solution-card fade-up"><div class="layer-tag">Layer 3</div><h3>&#x1F4B3; Embedded Campaign Finance</h3><p>SMEs access credit for bigger campaigns. Creators get paid upfront. Repayment structured around campaign outcomes.</p></div>
+    </div>
+    <div class="solution-modes"><span class="mode-label">Two modes:</span><span>Mode A: Pick your creator &rarr; AI prices it</span><span>&nbsp;|&nbsp;</span><span>Mode B: Enter budget from KES 5K &rarr; AI selects best creators</span></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label">How It Works</div>
+      <h2 class="section-title">From Sign-Up to Live ROI Dashboard<br>in Under 15 Minutes</h2>
+    </div>
+    <div class="steps-wrapper">
+      <div class="step fade-up"><div class="step-num">1</div><h4>Register &amp; Set Niche</h4><p>Fashion, food, e-commerce&hellip;</p></div>
+      <div class="step fade-up"><div class="step-num">2</div><h4>Set Goal + Budget</h4><p>From KES 5K. Platform + duration.</p></div>
+      <div class="step fade-up"><div class="step-num">3</div><h4>AI Builds Your Plan</h4><p>Creators matched, ROI predicted.</p></div>
+      <div class="step fade-up"><div class="step-num">4</div><h4>Finance if Needed</h4><p>Approve credit, launch 1-click.</p></div>
+      <div class="step fade-up"><div class="step-num">5</div><h4>Track in Real Time</h4><p>Spend, reach &amp; ROI live.</p></div>
+    </div>
+    <div class="mode-note"><strong>Mode A:</strong> Start with a creator &rarr; AI prices it &nbsp;|&nbsp; <strong>Mode B:</strong> Enter budget &rarr; AI selects best creators</div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-sub">40% commission on all tiers. Blended average: KES 26,000 revenue per campaign.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card fade-up"><div class="pricing-tier">DIY / Custom</div><div class="pricing-mode">You design it</div><div class="pricing-value">KES 5,000+</div><div class="pricing-earn">Evercore earns KES 2,000+ (40%)</div><hr class="pricing-divider"><ul class="pricing-features"><li>Build your own package</li><li>AI assists creator selection</li><li>Any creator, any platform</li><li>High volume acquisition engine</li></ul></div>
+      <div class="pricing-card fade-up"><div class="pricing-tier">Starter</div><div class="pricing-mode">We curate it</div><div class="pricing-value">KES 25,000</div><div class="pricing-earn">Evercore earns KES 10,000 (40%)</div><hr class="pricing-divider"><ul class="pricing-features"><li>1 micro-influencer</li><li>Single platform (IG or TikTok)</li><li>7-day campaign</li><li>Basic analytics dashboard</li></ul></div>
+      <div class="pricing-card popular fade-up"><div class="popular-tag">Most Popular</div><div class="pricing-tier">Growth</div><div class="pricing-mode">We optimise it</div><div class="pricing-value">KES 80,000</div><div class="pricing-earn">Evercore earns KES 32,000 (40%)</div><hr class="pricing-divider"><ul class="pricing-features"><li>3 influencers (micro + mid)</li><li>Multi-platform IG + TikTok</li><li>14-day + AI optimisation</li><li>Full ROI dashboard</li></ul></div>
+      <div class="pricing-card fade-up"><div class="pricing-tier">Pro</div><div class="pricing-mode">We run it</div><div class="pricing-value">KES 200,000+</div><div class="pricing-earn">Evercore earns KES 80,000+ (40%)</div><hr class="pricing-divider"><ul class="pricing-features"><li>5+ influencers + UGC content</li><li>All platforms + production</li><li>30-day managed campaign</li><li>White-label performance report</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY WINS -->
+<section id="why">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Why Evercore</div>
+      <h2 class="section-title">Why Evercore Wins &mdash; and Why Now</h2>
+      <p class="section-sub">The market, the model, and the timing are all aligned.</p>
+    </div>
+    <div class="wins-grid">
+      <div class="win-card fade-up"><div class="win-icon">&#x2705;</div><h3>Real Problem, Proven Demand</h3><p>30+ SME interviews confirm the pain. 8 businesses indicated willingness to pay before we built anything.</p></div>
+      <div class="win-card fade-up"><div class="win-icon">&#x1F512;</div><h3>Defensible Data Moat</h3><p>AI flywheel improves with every campaign &mdash; from KES 5K DIY to KES 200K Pro. Latecomers can't buy what we've learned.</p></div>
+      <div class="win-card fade-up"><div class="win-icon">&#x1F30D;</div><h3>Pan-African Expansion Path</h3><p>Kenya &rarr; Uganda &rarr; Tanzania &rarr; Nigeria. Same product, same model, rapidly growing creator economies.</p></div>
+      <div class="win-card fade-up"><div class="win-icon">&#x1F680;</div><h3>Entry at KES 5K = Massive TAM</h3><p>Every SME with KES 5K can start. No other platform serves this segment. That's our acquisition engine and moat.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Contact Us</div>
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="section-sub">Whether you're an SME ready to grow or a creator looking for better brand deals &mdash; we'd love to hear from you.</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-items">
+          <a href="tel:0791003376" class="contact-item"><div class="contact-icon">&#x1F4DE;</div><div><div class="ci-label">Phone / WhatsApp</div><div class="ci-value">0791 003 376</div></div></a>
+          <a href="https://instagram.com/evercoredigitalagency" target="_blank" class="contact-item"><div class="contact-icon">&#x1F4F8;</div><div><div class="ci-label">Instagram</div><div class="ci-value">@evercoredigitalagency</div></div></a>
+          <div class="contact-item"><div class="contact-icon">&#x1F4CD;</div><div><div class="ci-label">Location</div><div class="ci-value">Nairobi, Kenya</div></div></div>
+        </div>
+      </div>
+      <div class="contact-form-card">
+        <h3>Send us a message</h3>
+        <p>We reply within 24 hours</p>
+        <div class="contact-form">
+          <div class="form-group"><label>Name</label><input type="text" placeholder="Your name"/></div>
+          <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"/></div>
+          <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your business or creator profile..."></textarea></div>
+          <button class="btn-submit" onclick="handleContact(this)">Send Message &rarr;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-content">
+    <div class="section-label" style="text-align:center;margin-bottom:0.7rem;">Join Evercore</div>
+    <h2>Ready to grow your business<br>with smarter campaigns?</h2>
+    <p>Join our early access waitlist and get your first campaign at no cost.</p>
+    <div class="waitlist-form">
+      <input type="email" placeholder="Enter your email address" id="waitlistEmail"/>
+      <button onclick="handleWaitlist()">Join Waitlist &rarr;</button>
+    </div>
+    <p style="font-size:0.7rem;color:var(--muted);">No spam. Early access only. Unsubscribe anytime.</p>
+  </div>
+  <footer>
+    <div class="footer-logo">Ever<span>core</span></div>
+    <div>Confidential &nbsp;|&nbsp; Nairobi, Kenya &nbsp;|&nbsp; 2026</div>
+    <div class="footer-socials">
+      <a href="https://instagram.com/evercoredigitalagency" target="_blank" title="Instagram">ig</a>
+      <a href="tel:0791003376" title="Call us">ph</a>
+    </div>
+  </footer>
+</section>
+
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(i=>{if(i.isIntersecting)i.target.classList.add('visible');});},{threshold:0.12});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+window.addEventListener('scroll',()=>{document.getElementById('navbar').style.background=window.scrollY>40?'rgba(6,15,30,0.99)':'rgba(6,15,30,0.92)';});
+
+function openModal(tab){
+  document.getElementById('authModal').classList.add('active');
+  document.body.style.overflow='hidden';
+  switchTab(tab||'signin');
+}
+function openSignup(role){
+  openModal('signup');
+  switchRole(role);
+}
+function closeModal(){
+  document.getElementById('authModal').classList.remove('active');
+  document.body.style.overflow='';
+}
+function closeModalOutside(e){if(e.target===document.getElementById('authModal'))closeModal();}
+function switchTab(tab){
+  document.getElementById('tabSignin').classList.toggle('active',tab==='signin');
+  document.getElementById('tabSignup').classList.toggle('active',tab==='signup');
+  document.getElementById('signinForm').style.display=tab==='signin'?'block':'none';
+  document.getElementById('signupForm').style.display=tab==='signup'?'block':'none';
+  document.getElementById('modalSubtitle').textContent=tab==='signin'?'Welcome back to Evercore':'Create your free Evercore account';
+}
+function switchRole(role){
+  ['business','influencer','creative'].forEach(function(r){
+    document.getElementById('role'+r.charAt(0).toUpperCase()+r.slice(1)).classList.toggle('active',r===role);
+  });
+  document.getElementById('businessTypeGroup').style.display=role==='business'?'block':'none';
+  document.getElementById('influencerTypeGroup').style.display=role==='influencer'?'block':'none';
+  document.getElementById('creativeTypeGroup').style.display=role==='creative'?'block':'none';
+}
+function handleWaitlist(){
+  var input=document.getElementById('waitlistEmail');
+  if(input.value&&input.value.indexOf('@')>-1){input.value='';input.placeholder="You're on the list! We'll be in touch.";input.style.borderColor='var(--teal)';}
+  else{input.style.borderColor='#ff4444';input.placeholder='Please enter a valid email';}
+}
+function handleContact(btn){btn.textContent='Message Sent!';btn.style.background='var(--teal2)';setTimeout(function(){btn.textContent='Send Message';btn.style.background='';},3000);}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>
